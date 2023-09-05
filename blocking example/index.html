@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Blocking</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+        
+
+        function slowFunction() {
+            var elementRef = document.getElementById("data-stage");
+            var i = 0;
+
+            while (i < 9000000000) {
+                i = i + 1;
+            }
+            var resp = `<section style="padding-top: 5px;">
+                    <p>Finalmente acabou: ${i}</p>
+                </section>`
+
+            elementRef.innerHTML = elementRef.innerHTML + resp;
+        }
+
+        function sayHi() {
+            alert('Oie!')
+        }
+        
+    </script>
+</head>
+<body>
+    <header>
+        <button onclick="slowFunction()">
+            run slow function
+        </button> 
+        <button onclick="sayHi()">
+            Oie!
+        </button>   
+    </header>
+    <main id="data-stage">
+    </main>
+</body>
+</html>

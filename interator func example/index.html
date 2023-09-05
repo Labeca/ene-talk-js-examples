@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Iterator func</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+
+        const gen = generator(400)
+
+        async function callService(time, counter, id) {
+            var initTime = (new Date()).toString();
+            var elementRef = document.getElementById(id);
+            var apiCall = await fetch(
+                "http://localhost:3000", 
+                { 
+                    method: 'POST', 
+                    headers: { "Content-Type": "application/json" },  
+                    body: JSON.stringify({ delay: time })
+                }
+            );
+            var resp = await apiCall.json();
+
+            var endTime = (new Date()).toString();
+
+            var resp = `<section style="padding-top: 5px;">
+                    <h3>Started: Execution number: ${counter}</h3>
+                    <p>Started: ${initTime}</p>
+                    <p>Finished: ${endTime}</p>
+                    <p>Response: ${resp.message}</p>
+                </section>`
+
+            elementRef.innerHTML = elementRef.innerHTML + resp;
+        }
+
+        async function* generator(time) {
+            yield callService(time, 1, "data-stage")
+            yield callService(time, 2, "data-stage")
+            yield callService(time, 3, "data-stage")
+        }
+
+        async function test() {
+            const val = await gen.next();
+
+            if (val.done) {
+                alert("iterator acabou zé")
+            }
+        }
+        
+    </script>
+</head>
+<body>
+    <header>
+        <button onclick="test()">
+            action
+        </button>  
+    </header>
+    <main id="data-stage">
+    </main>
+</body>
+</html>

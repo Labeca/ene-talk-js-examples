@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>async block</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+
+        async function callService(time, counter, id) {
+            var initTime = (new Date()).toString();
+            var elementRef = document.getElementById(id);
+            var apiCall = await fetch(
+                "http://localhost:3000", 
+                { 
+                    method: 'POST', 
+                    headers: { "Content-Type": "application/json" },  
+                    body: JSON.stringify({ delay: time })
+                }
+            );
+            var resp = await apiCall.json();
+
+            var endTime = (new Date()).toString();
+
+            var resp = `<section style="padding-top: 5px;">
+                    <h3>Started: Execution number: ${counter}</h3>
+                    <p>Started: ${initTime}</p>
+                    <p>Finished: ${endTime}</p>
+                    <p>Response: ${resp.message}</p>
+                </section>`
+
+            elementRef.innerHTML = elementRef.innerHTML + resp;
+        }
+
+        async function test(id) {
+            await callService(200, 1, id)
+
+            await callService(5000, 2, id)
+
+            await callService(200, 3, id)
+        }
+
+        async function testPromise(id) {
+            await Promise.all([
+                await callService(200, 1, id),
+                await callService(5000, 2, id),
+                await callService(200, 3, id)
+            ])
+        }
+        
+    </script>
+</head>
+<body>
+    <header>
+        <button onclick="test('data-stage')">
+            await only
+        </button>
+        <button onclick="testPromise('data-stage-promise')">
+            Promise all
+        </button>  
+    </header>
+    <main id="data-stage">
+        <h2>Only await</h2>
+    </main>
+    <main id="data-stage-promise">
+        <h2>Promise all</h2>
+    </main>
+</body>
+</html>

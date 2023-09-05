@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Class</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+
+        class Father {
+            name;
+
+            constructor() {
+                this.name = "João"
+            }
+
+            functionEscope() {
+                console.log("function() ", this.name)
+            }
+
+            arrowFunction = () => {
+                console.log("arrow function => ", this.name)
+            }
+        }
+
+        class Child extends Father {
+            outsideScope;
+
+            constructor(func) {
+                super();
+
+                this.outsideScope = func
+            }
+
+            sayName() {
+                super.functionEscope();
+                //super.arrowFunction();
+            }
+        }
+
+        function outsideScope() {
+            var name = "Frog";
+
+            console.log("outsideScope", this);
+        }
+
+        function test() {
+            const myFather = new Father();
+            const myChild = new Child(outsideScope);
+
+            myFather.functionEscope();
+            myFather.arrowFunction();
+
+            myChild.sayName();
+            myChild.outsideScope();
+        }
+        
+    </script>
+</head>
+<body>
+    <header>
+        <button onclick="test()">
+            action
+        </button>  
+    </header>
+    <main id="data-stage">
+    </main>
+</body>
+</html>
